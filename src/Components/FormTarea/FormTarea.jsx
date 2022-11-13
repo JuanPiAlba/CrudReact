@@ -3,7 +3,9 @@ import { Alert } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 
-const FormTarea = () => {
+const FormTarea = (props) => {
+  const { tareas, setTareas } = props;
+
   const [tarea, setTarea] = useState("");
 
   const inputRef = useRef();
@@ -16,15 +18,26 @@ const FormTarea = () => {
     e.preventDefault();
 
     if (tarea.trim().length === 0) {
+      //Caso error
       inputRef.current.classList.add("is-invalid");
       alert("No es Valido");
       return;
     }
-    
+    //Caso Exitoso
     inputRef.current.classList.remove("is-invalid");
 
-    localStorage.setItem("tareas",JSON.stringify([tarea]))
-    
+    const nuevasTareas = [
+      ...tareas, //operador spread
+      {
+        tarea, // tarea: tarea -> es lo mismos
+        isDone: false,
+      },
+    ];
+
+    setTareas(nuevasTareas); 
+
+    localStorage.setItem("tareas", JSON.stringify([nuevasTareas]));
+
     console.log(tarea);
   };
 
